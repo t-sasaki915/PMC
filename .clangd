@@ -1,0 +1,15 @@
+CompileFlags:
+  Add: [
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wno-unknown-attributes",
+    "-Wno-gnu-zero-variadic-macro-arguments",
+    "-Wno-gnu-binary-literal",
+    "-mmcu=atmega328p",
+    "-DF_CPU=1000000UL",
+    "--target=avr",
+    "-I", "C:/avr-gcc/avr/include"
+  ]
+
+  CompilationDatabase: .
