@@ -67,7 +67,7 @@ SYNC_PULSE_WAIT:
     DEC  WAIT_CNT                                ; 1 clock
     BRNE SYNC_PULSE_WAIT                         ; if WAIT_CNT /= 0 then 2 clocks else 1 clock.
     NOP                                          ; 1 clock
-                                                 ; Total 61 clocks. (3.8125 microseconds on 16MHz; ideal: 3.813 microseconds.)
+                                                 ; Total 61 clocks. (3.8125 microseconds on 16MHz; ideal: 3.8133 microseconds.)
                                                  ; --- End Sync Pulse ---
                                             
 BACK_PORCH:                                      ; --- Begin Back Porch ---
@@ -78,7 +78,7 @@ BACK_PORCH_WAIT:
     BRNE BACK_PORCH_WAIT                         ; if WAIT_CNT /= 0 then 2 clocks else 1 clock.
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
-                                                 ; Total 31 clocks. (1.9375 microseconds on 16MHz; ideal: 1.907 microseconds.)
+                                                 ; Total 31 clocks. (1.9375 microseconds on 16MHz; ideal: 1.90665 microseconds.)
                                                  ; -- End Back Porch ---
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
@@ -91,7 +91,7 @@ ACTIVE_VIDEO_WAIT:
     ;NOP                                          ; 1 clock
     NOP
     CBI _SFR_IO_ADDR(PORTB), G_PIN
-                                                 ; Total 407 clocks. (25.4375 microseconds on 16MHz; ideal: 25.42 microseconds.)
+                                                 ; Total 407 clocks. (25.4375 microseconds on 16MHz; ideal: 25.42204 microseconds.)
                                                  ; -- End Active Video ---
 
 FRONT_PORCH:                                     ; --- Begin Front Porch ---
@@ -111,5 +111,5 @@ LINE_CNT_NOT_ZERO:
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
     RJMP SYNC_PULSE                              ; 2 clocks
-                                                 ; Total 10 clocks. (0.625 microseconds on 16MHz; ideal: 0.64 microseconds.)
+                                                 ; Total 10 clocks. (0.625 microseconds on 16MHz; ideal: 0.63555 microseconds.)
                                                  ; -- End Front Porch ---
