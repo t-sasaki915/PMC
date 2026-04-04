@@ -3,9 +3,15 @@
 #define H_SYNC_PIN 5
 #define V_SYNC_PIN 4
 
+#define R_PIN 3
+#define G_PIN 2
+#define B_PIN 1
+
 #define LINE_CNT_L R24
 #define LINE_CNT_H R25
 #define WAIT_CNT R20
+
+#define ZERO_REG R16
 
 .section .text
 .ORG 0x0000
@@ -17,10 +23,17 @@ MAIN:
     LDI  R16, hi8(RAMEND)
     OUT  _SFR_IO_ADDR(SPH), R16
 
+    LDI  ZERO_REG, 0
+
     SBI  _SFR_IO_ADDR(DDRC), H_SYNC_PIN          ; Set H_SYNC_PIN to output mode and HIGH.
     SBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN
     SBI  _SFR_IO_ADDR(DDRC), V_SYNC_PIN          ; Set V_SYNC_PIN to output mode and HIGH.
     SBI  _SFR_IO_ADDR(PORTC), V_SYNC_PIN
+    SBI  _SFR_IO_ADDR(DDRB), R_PIN
+    SBI  _SFR_IO_ADDR(DDRB), G_PIN
+    SBI  _SFR_IO_ADDR(DDRB), B_PIN
+
+    CLI
 
 MAIN_LOOP:
     LDI  LINE_CNT_H, hi8(525)
@@ -30,10 +43,10 @@ SYNC_PULSE:                                      ; --- Begin Sync Pulse ---
     CBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; Begin H_SYNC pulse. (2 clocks)
 
     CPI  LINE_CNT_L, 34                          ; 1 clock
-    CPC  LINE_CNT_H, 0                           ; 1 clock
+    CPC  LINE_CNT_H, ZERO_REG                    ; 1 clock
     BREQ LINE_CNT_WAS_34                         ; if LINE_CNT == 34 then 2 clocks else 1 clock.
     CPI  LINE_CNT_L, 35                          ; 1 clock
-    CPC  LINE_CNT_H, 0                           ; 1 clock
+    CPC  LINE_CNT_H, ZERO_REG                    ; 1 clock
     BREQ SET_VSYNC_LOW                           ; if LINE_CNT == 35 then 2 clocks else 1 clock.
 
     SBI  _SFR_IO_ADDR(PORTC), V_SYNC_PIN         ; 2 clocks
@@ -70,12 +83,15 @@ BACK_PORCH_WAIT:
                                                  ; -- End Back Porch ---
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
-    LDI  WAIT_CNT, 135                           ; 1 clock
+    LDI  WAIT_CNT, 134                           ; 1 clock
+    SBI _SFR_IO_ADDR(PORTB), G_PIN
 ACTIVE_VIDEO_WAIT:
     DEC  WAIT_CNT                                ; 1 clock
     BRNE ACTIVE_VIDEO_WAIT                       ; if WAIT_CNT /= 0 then 2 clocks else 1 clock.
-    NOP                                          ; 1 clock
-    NOP                                          ; 1 clock
+    ;NOP                                          ; 1 clock
+    ;NOP                                          ; 1 clock
+    NOP
+    CBI _SFR_IO_ADDR(PORTB), G_PIN
                                                  ; Total 407 clocks. (25.4375 microseconds on 16MHz; ideal: 25.42 microseconds.)
                                                  ; -- End Active Video ---
 
