@@ -43,7 +43,7 @@ SYNC_PULSE:                                      ; --- Begin Sync Pulse ---
 
     CPI  LINE_CNT_L, 34                          ; 1 clock
     CPC  LINE_CNT_H, ZERO_REG                    ; 1 clock
-    BREQ LINE_CNT_WAS_34                         ; if LINE_CNT == 34 then 2 clocks else 1 clock.
+    BREQ WAIT_THREE_CLOCKS_AND_SET_VSYNC_LOW     ; if LINE_CNT == 34 then 2 clocks else 1 clock.
     CPI  LINE_CNT_L, 35                          ; 1 clock
     CPC  LINE_CNT_H, ZERO_REG                    ; 1 clock
     BREQ SET_VSYNC_LOW                           ; if LINE_CNT == 35 then 2 clocks else 1 clock.
@@ -51,7 +51,7 @@ SYNC_PULSE:                                      ; --- Begin Sync Pulse ---
     SBI  _SFR_IO_ADDR(PORTC), V_SYNC_PIN         ; 2 clocks
     RJMP VSYNC_IS_SET                            ; 2 clocks
 
-LINE_CNT_WAS_34:
+WAIT_THREE_CLOCKS_AND_SET_VSYNC_LOW:
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
