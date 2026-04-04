@@ -15,9 +15,9 @@
 
 .section .text
 .ORG 0x0000
-    RJMP MAIN
+    RJMP RESET
 
-MAIN:
+RESET:
     LDI  R16, lo8(RAMEND)                        ; Initialise stack pointers
     OUT  _SFR_IO_ADDR(SPL), R16
     LDI  R16, hi8(RAMEND)
@@ -33,11 +33,10 @@ MAIN:
     SBI  _SFR_IO_ADDR(DDRB), G_PIN
     SBI  _SFR_IO_ADDR(DDRB), B_PIN
 
-    CLI
-
-MAIN_LOOP:
     LDI  LINE_CNT_H, hi8(525)
     LDI  LINE_CNT_L, lo8(525)
+
+    CLI
 
 SYNC_PULSE:                                      ; --- Begin Sync Pulse ---
     CBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; Begin H_SYNC pulse. (2 clocks)
@@ -96,13 +95,21 @@ ACTIVE_VIDEO_WAIT:
                                                  ; -- End Active Video ---
 
 FRONT_PORCH:                                     ; --- Begin Front Porch ---
-    LDI  WAIT_CNT, 2                             ; 1 clock
-FRONT_PORCH_WAIT:
-    DEC  WAIT_CNT                                ; 1 clock
-    BRNE FRONT_PORCH_WAIT                        ; if WAIT_CNT /= 0 then 2 clocks else 1 clock.
     SBIW LINE_CNT_L, 1                           ; 2 clocks
-    BRNE SYNC_PULSE                              ; if LINE_CNT /= 0 then 2 clocks else 1 clock.
+    BRNE LINE_CNT_NOT_ZERO                       ; if LINE_CNT /= 0 then 2 clocks else 1 clock.
+
+    LDI  LINE_CNT_H, hi8(525)                    ; 1 clock
+    LDI  LINE_CNT_L, lo8(525)                    ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    RJMP SYNC_PULSE                              ; 2 clocks
+
+LINE_CNT_NOT_ZERO:
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    RJMP SYNC_PULSE                              ; 2 clocks
                                                  ; Total 10 clocks. (0.625 microseconds on 16MHz; ideal: 0.64 microseconds.)
                                                  ; -- End Front Porch ---
-
-    RJMP MAIN_LOOP
