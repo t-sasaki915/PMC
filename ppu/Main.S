@@ -31,18 +31,30 @@ RESET:
     LDI  LINE_CNT_H, hi8(525)
     LDI  LINE_CNT_L, lo8(525)
 
-TEMP_COPY_TEST_PATTERN_TO_VRAM:
-    LDI  ZH, hi8(TEST_PATTERN)
-    LDI  ZL, lo8(TEST_PATTERN)
-    LDI  YH, hi8(VRAM_ADDR)
-    LDI  YL, lo8(VRAM_ADDR)
-    LDI  R16, 135
+GENERATE_TEST_PATTERN:
+    LDI  ZH, hi8(VRAM_ADDR)
+    LDI  ZL, lo8(VRAM_ADDR)
 
-TEMP_COPY_TEST_PATTERN_TO_VRAM_LOOP:
-    LPM  R17, Z+
-    ST   Y+, R17
-    DEC  R16
-    BRNE TEMP_COPY_TEST_PATTERN_TO_VRAM_LOOP
+    LDI  XH, hi8(1024)
+    LDI  XL, lo8(1024)
+
+    LDI  R18, 1
+GENERATE_TEST_PATTERN_LOOP:
+    TST  R18
+    BREQ GENERATE_TEST_PATTERN_FLAG_IS_ZERO
+
+    LDI  R19, (1 << 1)
+    ST   Z+, R19
+    LDI  R18, 0
+    RJMP GENERATE_TEST_PATTERN_LOOP_CONTINUE
+
+GENERATE_TEST_PATTERN_FLAG_IS_ZERO:
+    ST   Z+, ZERO_REG
+    LDI  R18, 1
+
+GENERATE_TEST_PATTERN_LOOP_CONTINUE:
+    SBIW XL, 1
+    BRNE GENERATE_TEST_PATTERN_LOOP
 
 SYNC_PULSE:                                      ; --- Begin Sync Pulse ---
     CBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; Begin H_SYNC pulse. (2 clocks)
@@ -148,22 +160,3 @@ LINE_CNT_NOT_ZERO:
     RJMP SYNC_PULSE                              ; 2 clocks
                                                  ; Total 10 clocks. (0.625 microseconds on 16MHz; ideal: 0.63555 microseconds.)
                                                  ; -- End Front Porch ---
-
-#define ONE (1 << 1)
-#define ZERO 0b00
-
-TEST_PATTERN:
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 10
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 20
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 30
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 40
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 50
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 60
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 70
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 80
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 90
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 100
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 110
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 120
-    .byte ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO, ONE, ZERO ; 130
-    .byte ONE, ZERO, ONE, ZERO, ONE                             ; 105
