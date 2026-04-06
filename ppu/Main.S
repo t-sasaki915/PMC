@@ -8,6 +8,7 @@
 #define LINE_CNT_L R24
 #define LINE_CNT_H R25
 #define WAIT_CNT R20
+#define VERTICAL_REPEAT_CNT R16
 
 #define ZERO_REG R22
 
@@ -27,9 +28,6 @@ RESET:
     SBI  _SFR_IO_ADDR(DDRC), V_SYNC_PIN
     SBI  _SFR_IO_ADDR(PORTC), V_SYNC_PIN
     SBI  _SFR_IO_ADDR(DDRB), PIXEL_PIN
-
-    LDI  LINE_CNT_H, hi8(525)
-    LDI  LINE_CNT_L, lo8(525)
 
 GENERATE_TEST_PATTERN:
     LDI  ZH, hi8(VRAM_ADDR)
@@ -56,6 +54,17 @@ GENERATE_TEST_PATTERN_LOOP_CONTINUE:
     SBIW XL, 1
     BRNE GENERATE_TEST_PATTERN_LOOP
 
+RESET_CONTINUE:
+    LDI  LINE_CNT_H, hi8(525)
+    LDI  LINE_CNT_L, lo8(525)
+
+    LDI  ZL, lo8(VRAM_ADDR)
+    LDI  ZH, hi8(VRAM_ADDR)
+    LDI  XL, lo8(VRAM_ADDR)
+    LDI  XH, hi8(VRAM_ADDR)
+
+    LDI  VERTICAL_REPEAT_CNT, 3
+
 SYNC_PULSE:                                      ; --- Begin Sync Pulse ---
     CBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; Begin H_SYNC pulse. (2 clocks)
 
@@ -79,23 +88,47 @@ SET_VSYNC_LOW:
     NOP                                          ; 1 clock
 
 VSYNC_IS_SET:                                    ; 12 clocks so far.
-    LDI  WAIT_CNT, 16                            ; 1 clock
+    LDI  WAIT_CNT, 14                            ; 1 clock
 
 SYNC_PULSE_WAIT:
     DEC  WAIT_CNT                                ; 1 clock
     BRNE SYNC_PULSE_WAIT                         ; if WAIT_CNT /= 0 then 2 clocks else 1 clock.
+    CPI  LINE_CNT_L, 47                          ; 1 clock
+    CPC  LINE_CNT_H, ZERO_REG                    ; 1 clock
+    BRSH WAIT_THREE_CLOCKS_AND_BACK_PORCH        ; 2 clocks (>= 47) / 1 clock (< 47)
+
+    NOP                                          ; 1 clock
+    JMP  VBLANK                                  ; 3 clocks
+
+WAIT_THREE_CLOCKS_AND_BACK_PORCH:
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
     NOP                                          ; 1 clock
                                                  ; Total 61 clocks. (3.8125 microseconds on 16MHz; ideal: 3.8133 microseconds.)
                                                  ; --- End Sync Pulse ---
-                                            
+
 BACK_PORCH:                                      ; --- Begin Back Porch ---
-    SBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; End H_SYNC pulse. (2 clocks)
-    LDI  WAIT_CNT, 9                             ; 1 clock
+    SBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; 2 clocks
+    TST  VERTICAL_REPEAT_CNT                     ; 1 clock
+    BREQ VERTICAL_REPEAT_CNT_IS_ZERO             ; 2 clocks (== 0) / 1 clock (/= 0)
+
+    DEC  VERTICAL_REPEAT_CNT                     ; 1 clock
+    MOVW ZL, XL                                  ; 1 clock
+    RJMP BACK_PORCH_CONTINUE                     ; 2 clocks
+
+VERTICAL_REPEAT_CNT_IS_ZERO:
+    LDI  VERTICAL_REPEAT_CNT, 4                  ; 1 clock
+    MOVW XL, ZL                                  ; 1 clock
+    NOP                                          ; 1 clock
+
+BACK_PORCH_CONTINUE:                             ; 8 clocks so far.
+    LDI  WAIT_CNT, 7                             ; 1 clock
+
 BACK_PORCH_WAIT:
     DEC  WAIT_CNT                                ; 1 clock
-    BRNE BACK_PORCH_WAIT                         ; if WAIT_CNT /= 0 then 2 clocks else 1 clock.
-    LDI  R30, lo8(VRAM_ADDR)                     ; 1 clock
-    LDI  R31, hi8(VRAM_ADDR)                     ; 1 clock
+    BRNE BACK_PORCH_WAIT                         ; 2 clocks (/= 0) / 1 clock (== 0)
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
                                                  ; Total 31 clocks. (1.9375 microseconds on 16MHz; ideal: 1.90665 microseconds.)
                                                  ; -- End Back Porch ---
 
@@ -143,16 +176,8 @@ ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
 
 FRONT_PORCH:                                     ; --- Begin Front Porch ---
     SBIW LINE_CNT_L, 1                           ; 2 clocks
-    BRNE LINE_CNT_NOT_ZERO                       ; if LINE_CNT /= 0 then 2 clocks else 1 clock.
-
-    LDI  LINE_CNT_H, hi8(525)                    ; 1 clock
-    LDI  LINE_CNT_L, lo8(525)                    ; 1 clock
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
-    NOP                                          ; 1 clock
-    RJMP SYNC_PULSE                              ; 2 clocks
-
-LINE_CNT_NOT_ZERO:
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
@@ -160,3 +185,29 @@ LINE_CNT_NOT_ZERO:
     RJMP SYNC_PULSE                              ; 2 clocks
                                                  ; Total 10 clocks. (0.625 microseconds on 16MHz; ideal: 0.63555 microseconds.)
                                                  ; -- End Front Porch ---
+
+VBLANK:
+    SBI  _SFR_IO_ADDR(PORTC), H_SYNC_PIN         ; 2 clocks
+    LDI  ZL, lo8(VRAM_ADDR)                      ; 1 clock
+    LDI  ZH, hi8(VRAM_ADDR)                      ; 1 clock
+    LDI  XL, lo8(VRAM_ADDR)                      ; 1 clock
+    LDI  XH, hi8(VRAM_ADDR)                      ; 1 clock
+
+    SBIW LINE_CNT_L, 1                           ; 2 clocks
+    BREQ RESET_LINE_CNT                          ; 2 clocks (== 0) / 1 clock (/= 0)
+    NOP                                          ; 1 clock
+    RJMP VBLANK_CONTINUE                         ; 2 clocks
+
+RESET_LINE_CNT:
+    LDI  LINE_CNT_H, hi8(525)                    ; 1 clock
+    LDI  LINE_CNT_L, lo8(525)                    ; 1 clock
+
+VBLANK_CONTINUE:                                 ; 12 clocks so far
+    LDI  WAIT_CNT, 144                           ; 1 clock
+
+VBLANK_WAIT:
+    DEC  WAIT_CNT                                ; 1 clock
+    BRNE VBLANK_WAIT                             ; 2 clocks (/= 0) / 1 clock (== 0)
+    NOP                                          ; 1 clock
+    JMP  SYNC_PULSE                              ; 3 clocks
+                                                 ; Total 448 clocks.
