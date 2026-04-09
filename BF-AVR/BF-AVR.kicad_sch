@@ -128,6 +128,171 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector:Conn_01x02_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02_Socket"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x02, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x02_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Connector:Conn_01x03_Pin"
 			(pin_names
 				(offset 1.016)
@@ -5237,7 +5402,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 109.22) (xy 82.55 109.22)
+			(xy 87.63 102.87) (xy 92.71 102.87)
 		)
 		(stroke
 			(width 0)
@@ -5327,7 +5492,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 107.95) (xy 82.55 109.22)
+			(xy 92.71 101.6) (xy 92.71 102.87)
 		)
 		(stroke
 			(width 0)
@@ -6085,16 +6250,6 @@
 		)
 		(uuid "240e976a-e401-4d16-9bcd-9eadb857332d")
 	)
-	(label "D+"
-		(at 82.55 90.17 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "25593ca9-9cb1-4a20-a5dc-b2ce7849981f")
-	)
 	(label "DIN_3"
 		(at 224.79 50.8 0)
 		(effects
@@ -6496,7 +6651,7 @@
 		(uuid "9ec17d51-1140-4540-94e9-79e79a6ed9b5")
 	)
 	(label "D-"
-		(at 104.14 90.17 270)
+		(at 95.25 87.63 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6605,6 +6760,16 @@
 		)
 		(uuid "b8235b14-399c-4aec-a92a-ee1909452383")
 	)
+	(label "D+"
+		(at 92.71 87.63 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b882da17-034e-4ff6-851c-3739b63d4735")
+	)
 	(label "DSub_12"
 		(at 180.34 104.14 0)
 		(effects
@@ -6685,7 +6850,7 @@
 		)
 		(uuid "cfa718e8-f9c2-424b-bb73-c5c4ce24e6a6")
 	)
-	(label "RESET"
+	(label "PF6"
 		(at 142.24 101.6 0)
 		(effects
 			(font
@@ -7018,7 +7183,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x14_P2.54mm_Vertical"
 			(at 153.67 91.44 0)
 			(effects
 				(font
@@ -7173,7 +7338,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b31d191-c0e3-40ff-90d3-dbd93e242f0d")
-		(property "Reference" "J16"
+		(property "Reference" "J14"
 			(at 175.895 71.12 0)
 			(effects
 				(font
@@ -7189,7 +7354,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x15_P2.54mm_Vertical"
 			(at 175.26 93.98 0)
 			(effects
 				(font
@@ -7264,7 +7429,7 @@
 		(instances
 			(project ""
 				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J16")
+					(reference "J14")
 					(unit 1)
 				)
 			)
@@ -7600,72 +7765,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
-		(at 104.14 102.87 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "275cd240-41e1-42b7-9e1e-3b9c82819db5")
-		(property "Reference" "J14"
-			(at 101.346 98.552 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Conn_01x01_Socket"
-			(at 92.71 100.838 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
-			(at 104.14 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 104.14 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 104.14 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b1dbedfa-665b-43c9-8f3f-e61bbc367151")
-		)
-		(instances
-			(project "BF-AVR"
-				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J14")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 242.57 113.03 0)
 		(unit 1)
@@ -7742,7 +7841,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2e6f0ded-68c5-4748-b3ed-dbed7c1b53ca")
-		(property "Reference" "J17"
+		(property "Reference" "J15"
 			(at 200.025 80.01 0)
 			(effects
 				(font
@@ -7758,7 +7857,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical"
 			(at 199.39 90.17 0)
 			(effects
 				(font
@@ -7806,23 +7905,24 @@
 		(instances
 			(project ""
 				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J17")
+					(reference "J15")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
-		(at 82.55 102.87 90)
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 92.71 82.55 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3c63f830-f5f5-4efb-88b3-886f5d18cbb8")
-		(property "Reference" "J13"
-			(at 79.756 98.552 90)
+		(fields_autoplaced yes)
+		(uuid "39eac4b9-b737-42b1-9c48-8c5b298c93fa")
+		(property "Reference" "J10"
+			(at 96.52 81.9149 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7830,8 +7930,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x01_Socket"
-			(at 71.12 100.838 90)
+		(property "Value" "Conn_01x02_Socket"
+			(at 96.52 84.4549 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7839,8 +7939,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
-			(at 82.55 102.87 0)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 92.71 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7849,7 +7949,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 82.55 102.87 0)
+			(at 92.71 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7857,8 +7957,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 82.55 102.87 0)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 92.71 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7867,12 +7967,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "902578c7-5679-49f4-9d63-32bf89be94e2")
+			(uuid "721f0f37-d839-4bd8-9d65-cc56559d4632")
+		)
+		(pin "2"
+			(uuid "b45c5f8b-0b51-46e4-9cac-946a1e2decb4")
 		)
 		(instances
-			(project "BF-AVR"
+			(project ""
 				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J13")
+					(reference "J10")
 					(unit 1)
 				)
 			)
@@ -7906,7 +8009,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 			(at 168.91 129.54 0)
 			(effects
 				(font
@@ -7978,7 +8081,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 			(at 91.44 144.78 0)
 			(effects
 				(font
@@ -8033,7 +8136,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4932d547-bc3c-4d7f-adfc-9a164cb5d3de")
-		(property "Reference" "J15"
+		(property "Reference" "J13"
 			(at 217.1877 40.64 0)
 			(effects
 				(font
@@ -8049,7 +8152,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Mini-DIN:Connector_Mini-DIN_Female_6Pin_2rows"
 			(at 217.17 50.8 0)
 			(effects
 				(font
@@ -8097,7 +8200,7 @@
 		(instances
 			(project ""
 				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J15")
+					(reference "J13")
 					(unit 1)
 				)
 			)
@@ -8261,7 +8364,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x01_P2.54mm_Vertical"
 			(at 189.23 128.27 0)
 			(effects
 				(font
@@ -8392,7 +8495,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_DIP:DIP-28_W7.62mm"
 			(at 134.62 138.43 0)
 			(effects
 				(font
@@ -8736,7 +8839,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 			(at 168.91 144.78 0)
 			(effects
 				(font
@@ -8986,72 +9089,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
-		(at 82.55 85.09 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9564a419-a4f0-4856-96a3-28c0ce9b6847")
-		(property "Reference" "J10"
-			(at 79.756 80.772 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Conn_01x01_Socket"
-			(at 71.12 83.058 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
-			(at 82.55 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 82.55 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 82.55 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ad59bef0-03e6-4b0a-b68b-251625e02727")
-		)
-		(instances
-			(project "BF-AVR"
-				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 203.2 133.35 0)
 		(unit 1)
@@ -9210,7 +9247,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x14_P2.54mm_Vertical"
 			(at 121.92 91.44 0)
 			(effects
 				(font
@@ -9492,72 +9529,6 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x01_Socket")
-		(at 104.14 85.09 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a8729e3e-000a-4b92-a498-d2c63d4ec50d")
-		(property "Reference" "J11"
-			(at 101.346 80.772 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Conn_01x01_Socket"
-			(at 92.71 83.058 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
-			(at 104.14 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 104.14 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 104.14 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "17f67a59-00e7-4b7e-9628-d608f0877628")
-		)
-		(instances
-			(project "BF-AVR"
-				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
-					(reference "J11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Socket")
 		(at 189.23 146.05 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9583,7 +9554,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x01_P2.54mm_Vertical"
 			(at 189.23 146.05 0)
 			(effects
 				(font
@@ -9624,7 +9595,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 104.14 107.95 0)
+		(at 95.25 101.6 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -9633,7 +9604,7 @@
 		(fields_autoplaced yes)
 		(uuid "bbdf5652-e373-4bb3-9129-b4f8452813da")
 		(property "Reference" "#PWR018"
-			(at 104.14 114.3 0)
+			(at 95.25 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9642,7 +9613,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 104.14 113.03 0)
+			(at 95.25 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9650,7 +9621,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 104.14 107.95 0)
+			(at 95.25 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9659,7 +9630,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 104.14 107.95 0)
+			(at 95.25 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9668,7 +9639,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 104.14 107.95 0)
+			(at 95.25 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9882,6 +9853,76 @@
 			(project "BF-AVR"
 				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
 					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 92.71 96.52 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ebf57f66-f2f7-466d-bd58-1994a6b362da")
+		(property "Reference" "J11"
+			(at 96.52 95.8849 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Conn_01x02_Socket"
+			(at 96.52 98.4249 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 92.71 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 92.71 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "093775f1-fc72-4715-b075-4ec1e69096ab")
+		)
+		(pin "2"
+			(uuid "b6cb3ea3-3320-4a39-81fb-7a149c9b1de8")
+		)
+		(instances
+			(project "BF-AVR"
+				(path "/5dd2bb56-1851-4121-a66f-6215484412d5"
+					(reference "J11")
 					(unit 1)
 				)
 			)
@@ -10133,7 +10174,7 @@
 	)
 	(symbol
 		(lib_id "power:VCC")
-		(at 77.47 109.22 0)
+		(at 87.63 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -10142,7 +10183,7 @@
 		(fields_autoplaced yes)
 		(uuid "ff382fc7-bb80-4c7f-ade0-2670bd48b3ab")
 		(property "Reference" "#PWR019"
-			(at 77.47 113.03 0)
+			(at 87.63 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10151,7 +10192,7 @@
 			)
 		)
 		(property "Value" "VCC"
-			(at 77.47 104.14 0)
+			(at 87.63 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10159,7 +10200,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 77.47 109.22 0)
+			(at 87.63 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10168,7 +10209,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 77.47 109.22 0)
+			(at 87.63 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10177,7 +10218,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VCC\""
-			(at 77.47 109.22 0)
+			(at 87.63 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
