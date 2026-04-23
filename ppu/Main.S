@@ -15,14 +15,17 @@
 #define TEXT_BUFFER_IDX_L XL
 #define TEXT_BUFFER_IDX_H XH
 
-#define TEXT_BUFFER_START_ADDR 0x4000
-
 .MACRO SLP3 n                            
     LDI  WAIT_CNT, \n
 1:
     DEC  WAIT_CNT
     BRNE 1b
 .ENDM
+
+.section .text_buffer_section, "aw", @nobits
+.ORG 0x0000
+TEXT_BUFFER:
+    .space 1140
 
 .section .text
 .ORG 0x0000
@@ -42,9 +45,9 @@ RESET:
     STS  PORTD_OUT, R16
 
 GENERATE_TEST_TEXT_BUFFER:
-    LDI  ZH, hi8(TEXT_BUFFER_START_ADDR)
-    LDI  ZL, lo8(TEXT_BUFFER_START_ADDR)
-    LDI  XH, hi8(1140)
+    LDI  ZH, hi8(TEXT_BUFFER)
+    LDI  ZL, lo8(TEXT_BUFFER)
+    LDI  XH, hi8(1140)                           ; 38x30
     LDI  XL, lo8(1140)
     LDI  R16, 0
 
