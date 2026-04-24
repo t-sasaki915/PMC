@@ -124,7 +124,8 @@ VBLANK:                                          ; 7 clocks so far
     RJMP FRONT_PORCH                             ; 2 clocks
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
-
+    SLP3 203                                     ; 609 clocks
+    NOP                                          ; 1 clock
                                                  ; Total 610 clocks.
                                                  ; -- End Active Video ---
 
@@ -152,30 +153,4 @@ FRONT_PORCH_CONTINUE:                            ; 8 clocks so far
                                                  ; Total 15 clocks.
                                                  ; -- End Front Porch ---
 
-FONT_DATA:
-    .byte 0b00011000
-    .byte 0b00111100
-    .byte 0b01100110
-    .byte 0b01100110
-    .byte 0b01111110
-    .byte 0b01100110
-    .byte 0b01100110
-    .byte 0b00000000
-
-    .byte 0b11111100
-    .byte 0b01100110
-    .byte 0b01100110
-    .byte 0b01111100
-    .byte 0b01100110
-    .byte 0b01100110
-    .byte 0b11111100
-    .byte 0b00000000
-
-    .byte 0b00111100
-    .byte 0b01100110
-    .byte 0b11000000
-    .byte 0b11000000
-    .byte 0b11000000
-    .byte 0b01100110
-    .byte 0b00111100
-    .byte 0b00000000
+#include "Font.S"
