@@ -15,17 +15,17 @@
 #define TEXT_BUFFER_IDX_L XL
 #define TEXT_BUFFER_IDX_H XH
 
+.section .text_buffer_section, "aw", @nobits
+.ORG 0x0000
+TEXT_BUFFER:
+    .SPACE 1140
+
 .MACRO SLP3 n                            
     LDI  WAIT_CNT, \n
 1:
     DEC  WAIT_CNT
     BRNE 1b
 .ENDM
-
-.section .text_buffer_section, "aw", @nobits
-.ORG 0x0000
-TEXT_BUFFER:
-    .space 1140
 
 .section .text
 .ORG 0x0000
