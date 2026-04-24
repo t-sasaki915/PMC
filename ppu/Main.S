@@ -135,7 +135,7 @@ BACK_PORCH_CONTINUE:                             ; 6 clocks so far
 
     LD   FONT_BYTE, FONT_BYTE_ADDR               ; 2 clocks
 
-    SLP3 12                                      ; 36 clocks
+    SLP3 7                                       ; 21 clocks
     NOP                                          ; 1 clock
     RJMP ACTIVE_VIDEO                            ; 2 clocks
                                                  ; Total 45 clocks.
@@ -147,7 +147,9 @@ VBLANK:                                          ; 7 clocks so far
     RJMP FRONT_PORCH                             ; 2 clocks
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
-    SLP3 203                                     ; 609 clocks
+    STS  SPI0_DATA, FONT_BYTE                    ; 2 clock
+    SLP3 202                                     ; 606 clocks
+    NOP                                          ; 1 clock
     NOP                                          ; 1 clock
                                                  ; Total 610 clocks.
                                                  ; -- End Active Video ---
