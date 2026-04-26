@@ -148,6 +148,11 @@ BACK_PORCH:                                      ; --- Begin Back Porch ---
     TST  TEXT_BUFFER_ADDR_INCR_FLG               ; 1 clock
     BREQ SKIP_TEXT_BUFFER_ADDR_INCR_AND_CONTINUE ; 2 clocks (== 0) / 1 clock (== 1)
 
+    TST  VERTICAL_REPEAT_FLG                     ; 1 clock
+    BRNE VERTICAL_REPEAT                         ; 2 clocks (== 1) / 1 clock (== 0)
+
+    LDI  VERTICAL_REPEAT_FLG, 1                  ; 1 clock
+
     INC  LINE_OF_FONT                            ; 1 clock
     CPI  LINE_OF_FONT, 8                         ; 1 clock
     BRNE LINE_OF_FONT_IS_NOT_EIGHT               ; 2 clocks (/= 8) / 1 clock (== 8)
@@ -159,13 +164,23 @@ SKIP_TEXT_BUFFER_ADDR_INCR_AND_CONTINUE:
     LDI  TEXT_BUFFER_ADDR_INCR_FLG, 1            ; 1 clock
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    RJMP BACK_PORCH_CONTINUE                     ; 2 clocks
+
+VERTICAL_REPEAT:
+    LDI  VERTICAL_REPEAT_FLG, 0                  ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
     RJMP BACK_PORCH_CONTINUE                     ; 2 clocks
 
 LINE_OF_FONT_IS_NOT_EIGHT:
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
 
-BACK_PORCH_CONTINUE:                             ; 9 clocks so far
+BACK_PORCH_CONTINUE:                             ; 12 clocks so far
     LDI  FONT_BYTE_ADDR_BASE_L, lo8(FONT_DATA)   ; 1 clock
     LDI  FONT_BYTE_ADDR_BASE_H, hi8(FONT_DATA)   ; 1 clock
     ADD  FONT_BYTE_ADDR_BASE_L, LINE_OF_FONT     ; 1 clock
@@ -175,14 +190,26 @@ BACK_PORCH_CONTINUE:                             ; 9 clocks so far
 
     LOAD_FONT_BYTE                               ; 11 clocks
 
-    SLP3 7                                       ; 21 clocks
+    SLP3 6                                       ; 18 clocks
                                                  ; Total 46 clocks.
                                                  ; -- End Back Porch ---
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
     STS  SPI0_DATA, FONT_BYTE                    ; 2 clocks
-    SLP3 202                                     ; 606 clocks
+    LOAD_FONT_BYTE                               ; 11 clocks
     NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    STS  SPI0_DATA, FONT_BYTE                    ; 2 clocks
+    LOAD_FONT_BYTE                               ; 11 clocks
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
+    STS  SPI0_DATA, FONT_BYTE                    ; 2 clocks
+    
+    SLP3 191                                     ; 606 clocks
     NOP                                          ; 1 clock
                                                  ; Total 610 clocks.
                                                  ; -- End Active Video ---
@@ -190,6 +217,7 @@ ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
 FRONT_PORCH:                                     ; --- Begin Front Porch ---
     SBIW LINE_CNT_L, 1                           ; 2 clocks
     BREQ RESET_LINE_CNT                          ; 2 clocks (== 0) / 1 clock (/= 0)
+    NOP                                          ; 1 clock
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
@@ -203,10 +231,10 @@ RESET_LINE_CNT:
     LDI  TEXT_BUFFER_ADDR_H, hi8(TEXT_BUFFER)    ; 1 clock
     LDI  TEXT_BUFFER_ADDR_L, lo8(TEXT_BUFFER)    ; 1 clock
     LDI  LINE_OF_FONT, 0                         ; 1 clock
-    LDI  TEXT_BUFFER_ADDR_INCR_FLG, 1            ; 1 clock
+    LDI  TEXT_BUFFER_ADDR_INCR_FLG, 0            ; 1 clock
+    LDI  VERTICAL_REPEAT_FLG, 1                  ; 1 clock
 
-FRONT_PORCH_CONTINUE:                            ; 10 clocks so far
-    NOP                                          ; 1 clock
+FRONT_PORCH_CONTINUE:                            ; 11 clocks so far
     NOP                                          ; 1 clock
     NOP                                          ; 1 clock
     RJMP SYNC_PULSE                              ; 2 clock
