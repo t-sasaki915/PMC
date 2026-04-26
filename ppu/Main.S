@@ -124,7 +124,8 @@ SET_VSYNC_LOW:
 
 VSYNC_IS_SET:                                    ; 10 clocks so far.
     SLP3 27                                      ; 81 clocks
-                                                 ; Total 91 clocks.
+    NOP                                          ; 1 clock
+                                                 ; Total 92 clocks.
                                                  ; --- End Sync Pulse ---
 
 BACK_PORCH:                                      ; --- Begin Back Porch ---
@@ -149,7 +150,8 @@ BACK_PORCH:                                      ; --- Begin Back Porch ---
 
     SLP3 9                                       ; 27 clocks
     NOP                                          ; 1 clock
-                                                 ; Total 45 clocks.
+    NOP                                          ; 1 clock
+                                                 ; Total 46 clocks.
                                                  ; -- End Back Porch ---
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
