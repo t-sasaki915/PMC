@@ -39,39 +39,47 @@ TEXT_BUFFER:
 
 RESET:
     CLI
+                                                 
+    LDI  R16, 0xD8                               ; 分周を切り、内部クロックを24MHz動作にします。
+    LDI  R17, 0x24                               ; 安定のため、クロックは後々外部オシレーターに切り替える予定です。
+    OUT  CPU_CCP, R16                            ; 0xD8 = CCP_IOREG_gc
+    STS  CLKCTRL_OSCHFCTRLA, R17                 ; 0x24 = CLKCTRL_FRQSEL_24M_gc
 
-    LDI  R16, 0xD8                               ; 0xD8 = CCP_IOREG_gc
-    LDI  R17, 0x24                               ; 0x24 = CLKCTRL_FRQSEL_24M_gc
-    OUT  CPU_CCP, R16
-    STS  CLKCTRL_OSCHFCTRLA, R17
-
-    LDI  R16, (1 << H_SYNC_PIN)
+    LDI  R16, (1 << H_SYNC_PIN)                  ; HSyncピンとVSyncピンは負論理ですから、HIGHに吊り上げておきます。
     ORI  R16, (1 << V_SYNC_PIN)
     STS  PORTD_DIR, R16
     STS  PORTD_OUT, R16
 
-    LDI  R16, PIN4_bm
-    ORI  R16, PIN6_bm
+    LDI  R16, PIN4_bm                            ; RGB信号出力にはSPIを用います。データシートによると、
+    ORI  R16, PIN6_bm                            ; PA4=MOSI、PA6=SCK、PA7=SSです。
     ORI  R16, PIN7_bm
     STS  PORTA_DIR, R16
 
-    LDI  R16, SPI_MASTER_bm
+    LDI  R16, SPI_MASTER_bm                      ; SPIはマスターモード、12MHz動作で使用します。
     ORI  R16, SPI_ENABLE_bm
     ORI  R16, SPI_CLK2X_bm
     STS  SPI0_CTRLA, R16
 
-    LDI  R16, SPI_SSD_bm
+    LDI  R16, SPI_SSD_bm                         ; SSピンを解放できるようですが、PA7を出力モードにしないとSPIが起動しません。要検証。TODO.
     STS  SPI0_CTRLB, R16
 
-    LDI  R16, 0x80
+    LDI  R16, 0x80                               ; AVR128DB28のSPIはアイドル時HIGHなので、PA4の出力を反転して対処します。
     STS  PORTA_PIN4CTRL, R16
-
+                                                 ; テキストバッファは0x804000から1140バイトにわたる領域です。
+                                                 ; 文字コード(0-255, uint8_t)を画面に表示される順に格納したリストです。
+                                                 ; 文字コードは、Font.Sでの実装順と対応します。つまり、現在はA, B, Cの順番に実装されていますから、
+                                                 ; A = 0, B = 1, C = 2となっています。これは後程ASCIIに準拠するように書き直される予定です。TODO.
+                                                 ;
+                                                 ; テキストバッファは本来、CPUからの通信によって編集されるものですが、現在はCPUのプログラミングに
+                                                 ; 着手していないので、PPU側でテスト用のテキストバッファを生成する必要があります。
+                                                 ; GENERATE_TEST_TEXT_BUFFERで生成されるテキストバッファは、0, 1, 2, 0, 1, 2, ...という羅列、すなわち
+                                                 ; 'A', 'B', 'C', 'A', 'B', 'C', ...という配列です。
 GENERATE_TEST_TEXT_BUFFER:
-    LDI  ZH, hi8(TEXT_BUFFER)
+    LDI  ZH, hi8(TEXT_BUFFER)                    ; Zレジスタにテキストバッファの先頭アドレスを保存します。
     LDI  ZL, lo8(TEXT_BUFFER)
-    LDI  XH, hi8(1140)                           ; 38x30
-    LDI  XL, lo8(1140)
-    LDI  R16, 0
+    LDI  XH, hi8(1140)                           ; 1140回繰り返します。これはディスプレイの解像度が確定したタイミングで調節する必要があります。TODO.
+    LDI  XL, lo8(1140)                           ; 8ビットに収まらないのでXレジスタを用いています。
+    LDI  R16, 0                                  ; R16が文字コードを格納するレジスタです。
 
 GENERATE_TEST_TEXT_BUFFER_LOOP:
     ST   Z+, R16
@@ -85,7 +93,7 @@ GENERATE_TEST_TEXT_BUFFER_CONTINUE:
     SBIW XL, 1
     BRNE GENERATE_TEST_TEXT_BUFFER_LOOP
 
-RESET_CONTINUE:
+RESET_CONTINUE:                                  ; ここですべてのレジスタを初期化します。
     LDI  ZERO_REG, 0
     LDI  WAIT_CNT, 0
     LDI  LINE_OF_FONT, 0
