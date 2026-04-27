@@ -67,25 +67,24 @@ RESET:
     STS  PORTA_PIN4CTRL, R16
                                                  ; テキストバッファは0x804000から1140バイトにわたる領域です。
                                                  ; 文字コード(0-255, uint8_t)を画面に表示される順に格納したリストです。
-                                                 ; 文字コードは、Font.Sでの実装順と対応します。つまり、現在はA, B, Cの順番に実装されていますから、
-                                                 ; A = 0, B = 1, C = 2となっています。これは後程ASCIIに準拠するように書き直される予定です。TODO.
+                                                 ; 文字コードは、ASCIIコードと対応します。
                                                  ;
                                                  ; テキストバッファは本来、CPUからの通信によって編集されるものですが、現在はCPUのプログラミングに
                                                  ; 着手していないので、PPU側でテスト用のテキストバッファを生成する必要があります。
-                                                 ; GENERATE_TEST_TEXT_BUFFERで生成されるテキストバッファは、0, 1, 2, 0, 1, 2, ...という羅列、すなわち
+                                                 ; GENERATE_TEST_TEXT_BUFFERで生成されるテキストバッファは、65, 66, 67, 65, 66, 67, ...という羅列、すなわち
                                                  ; 'A', 'B', 'C', 'A', 'B', 'C', ...に対応します。
 GENERATE_TEST_TEXT_BUFFER:
     LDI  ZH, hi8(TEXT_BUFFER)                    ; Zレジスタにテキストバッファの先頭アドレスを保存します。
     LDI  ZL, lo8(TEXT_BUFFER)
     LDI  XH, hi8(1140)                           ; 1140回繰り返します。これはディスプレイの解像度が確定したタイミングで調節する必要があります。TODO.
     LDI  XL, lo8(1140)                           ; 8ビットに収まらないのでXレジスタを用いています。
-    LDI  R16, 0                                  ; R16が文字コードを格納するレジスタです。
+    LDI  R16, 65                                 ; R16が文字コードを格納するレジスタです。
 
 GENERATE_TEST_TEXT_BUFFER_LOOP:
     ST   Z+, R16
 
     INC  R16
-    CPI  R16, 3
+    CPI  R16, 68
     BRNE GENERATE_TEST_TEXT_BUFFER_CONTINUE
     LDI  R16, 0
 
@@ -143,7 +142,7 @@ VSYNC_IS_SET:                                    ; 10 clocks so far.
                                                  ; --- End Sync Pulse ---
 
 .MACRO LOAD_FONT_BYTE                            ; 11 clocks
-    LD   FONT_BYTE_ADDR_L, TEXT_BUFFER_ADDR+     ; 2 clocks
+    LD   FONT_BYTE_ADDR_L, TEXT_BUFFER_ADDR      ; 2 clocks
     MUL  FONT_BYTE_ADDR_L, TEMP_REG              ; 2 clocks
     MOVW FONT_BYTE_ADDR_L, R0                    ; 1 clock
 
@@ -189,8 +188,8 @@ VERTICAL_REPEAT:
     RJMP BACK_PORCH_CONTINUE                     ; 2 clocks
 
 LINE_OF_FONT_IS_NOT_EIGHT:
-    SUBI TEXT_BUFFER_ADDR_L, 33                  ; 1 clock
-    SBCI TEXT_BUFFER_ADDR_H, 0                   ; 1 clock
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
 
 BACK_PORCH_CONTINUE:                             ; 12 clocks so far
     LDI  FONT_BYTE_ADDR_BASE_L, lo8(FONT_DATA)   ; 1 clock
