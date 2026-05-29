@@ -178,7 +178,7 @@ VSYNC_IS_SET:                                    ; 10 clocks so far.
                                                  ; --- End Sync Pulse ---
 
 .MACRO LOAD_FONT_BYTE                            ; 11 clocks
-    LD   FONT_BYTE_ADDR_L, TEXT_BUFFER_ADDR      ; 2 clocks
+    LD   FONT_BYTE_ADDR_L, TEXT_BUFFER_ADDR+     ; 2 clocks
     MUL  FONT_BYTE_ADDR_L, TEMP_REG              ; 2 clocks
     MOVW FONT_BYTE_ADDR_L, R0                    ; 1 clock
 
@@ -224,8 +224,8 @@ VERTICAL_REPEAT:
     RJMP BACK_PORCH_CONTINUE                     ; 2 clocks
 
 LINE_OF_FONT_IS_NOT_EIGHT:
-    NOP                                          ; 1 clock
-    NOP                                          ; 1 clock
+    SUBI TEXT_BUFFER_ADDR_L, 33                  ; 1 clock
+    SBCI TEXT_BUFFER_ADDR_H, 0                   ; 1 clock
 
 BACK_PORCH_CONTINUE:                             ; 12 clocks so far
     LDI  FONT_BYTE_ADDR_BASE_L, lo8(FONT_DATA)   ; 1 clock
@@ -252,6 +252,8 @@ BACK_PORCH_CONTINUE:                             ; 12 clocks so far
 .ENDM
 
 ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
+    NOP                                          ; 1 clock
+    NOP                                          ; 1 clock
     STS  SPI0_DATA, FONT_BYTE                    ; 2 clocks
     TEMP_MACRO                                   ; 18 clocks
     TEMP_MACRO                                   ; 18 clocks
@@ -287,8 +289,6 @@ ACTIVE_VIDEO:                                    ; -- Begin Active Video ---
     TEMP_MACRO                                   ; 18 clocks
     
     SLP3 10                                      ; 30 clocks
-    NOP                                          ; 1 clock
-    NOP                                          ; 1 clock
                                                  ; Total 610 clocks.
                                                  ; -- End Active Video ---
 
