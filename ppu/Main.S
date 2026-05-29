@@ -23,6 +23,12 @@
 
 #define TEXT_BUFFER 0x4000
 
+#define CCP_IOREG_gc (0xD8<<0)
+#define CLKCTRL_CSUTHF_4K_gc (0x02<<4)
+#define CLKCTRL_FRQRANGE_24M_gc (0x02<<2)
+#define CLKCTRL_SELHF_XTAL_gc (0x00<<1)
+#define CLKCTRL_CLKSEL_EXTCLK_gc (0x03<<0)
+
 .MACRO SLP3 n                                    ; 3nクロック分消費するマクロです。
     LDI  WAIT_CNT, \n                            ;   LDI[1] + (n - 1) * (DEC[1] + BRNE[2]) + (DEC[1] + BRNE[1])
 1:                                               ; = 1 + (n - 1) * (1 + 2) + (1 + 1)
@@ -36,12 +42,49 @@
 
 RESET:
     CLI
-                                                 
-    LDI  R16, 0xD8                               ; 分周を切り、内部クロックを24MHz動作にします。
-    LDI  R17, 0x24                               ; 安定のため、クロックは後々外部オシレーターに切り替える予定です。
-    OUT  CPU_CCP, R16                            ; 0xD8 = CCP_IOREG_gc
-    STS  CLKCTRL_OSCHFCTRLA, R17                 ; 0x24 = CLKCTRL_FRQSEL_24M_gc
 
+INITIALISE_EXTERNAL_XTAL:
+	LDI  R16, CCP_IOREG_gc
+	LDI  R17, CLKCTRL_RUNSTDBY_bm
+    ORI  R17, CLKCTRL_CSUTHF_4K_gc
+    ORI  R17, CLKCTRL_FRQRANGE_24M_gc
+    ORI  R17, CLKCTRL_SELHF_XTAL_gc
+    ORI  R17, CLKCTRL_ENABLE_bm
+	OUT  _SFR_IO_ADDR(CCP), R16
+	STS  CLKCTRL_XOSCHFCTRLA, R17
+
+WAIT_FOR_OSCILLATOR_1:
+	LDS  R16, CLKCTRL_MCLKSTATUS
+	SBRS R16, CLKCTRL_EXTS_bp
+	RJMP WAIT_FOR_OSCILLATOR_1
+
+	LDI  R16, CCP_IOREG_gc
+	LDI  R17, 0
+	OUT  _SFR_IO_ADDR(CCP), R16
+	STS  CLKCTRL_MCLKCTRLB, R17
+
+    LDI  R16, CCP_IOREG_gc
+	LDI  R17, CLKCTRL_CLKSEL_EXTCLK_gc
+    ORI  R17, CLKCTRL_CLKOUT_bm
+	OUT  _SFR_IO_ADDR(CCP), R16
+	STS  CLKCTRL_MCLKCTRLA, R17
+
+WAIT_FOR_OSCILLATOR_2:
+	LDS  R16, CLKCTRL_MCLKSTATUS
+	SBRC R16, CLKCTRL_SOSC_bp
+	RJMP WAIT_FOR_OSCILLATOR_2
+
+	LDI  R16, CCP_IOREG_gc
+    LDS  R17, CLKCTRL_XOSCHFCTRLA
+	ANDI R17, (~CLKCTRL_RUNSTDBY_bm)
+	OUT  _SFR_IO_ADDR(CCP), R16
+	STS  CLKCTRL_XOSCHFCTRLA, R17
+
+    LDI  R16, (1 << H_SYNC_PIN)
+    STS  PORTD_DIR, R16
+    STS  PORTD_OUT, R16
+
+RESET_CONTINUE_1:
     LDI  R16, (1 << H_SYNC_PIN)
     ORI  R16, (1 << V_SYNC_PIN)
     STS  PORTD_DIR, R16
@@ -89,7 +132,7 @@ GENERATE_TEST_TEXT_BUFFER_CONTINUE:
     SBIW XL, 1
     BRNE GENERATE_TEST_TEXT_BUFFER_LOOP
 
-RESET_CONTINUE:                                  ; ここですべてのレジスタを初期化します。
+RESET_CONTINUE_2:                               
     LDI  ZERO_REG, 0
     LDI  WAIT_CNT, 0                             ; SLP3マクロで使用される専用のレジスタです。
     LDI  LINE_OF_FONT, 0                         ; フォントデータの行です。例えば、AのLINE_OF_FONT 0は0b00110000です。
